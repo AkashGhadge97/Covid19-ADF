@@ -19,6 +19,10 @@
 			"type": "string",
 			"defaultValue": "https://agcoviddl.dfs.core.windows.net/"
 		},
+		"tr_ingest_population_data_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/1d0e9e05-66c1-4ae9-a5cc-9c2e6ee48d25/resourceGroups/covid-reporting-rg/providers/Microsoft.Storage/storageAccounts/agcovidsa"
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -54,6 +58,9 @@
 					},
 					"ls_adls_agcoviddl_properties_typeProperties_url": {
 						"value": "[parameters('ls_adls_agcoviddl_properties_typeProperties_url')]"
+					},
+					"tr_ingest_population_data_properties_typeProperties_scope": {
+						"value": "[parameters('tr_ingest_population_data_properties_typeProperties_scope')]"
 					}
 				}
 			},

@@ -10,12 +10,25 @@
 						"type": "DatasetReference"
 					},
 					"name": "HospitalAdmissions"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_country_lookup",
+						"type": "DatasetReference"
+					},
+					"name": "CountrySource"
 				}
 			],
 			"sinks": [],
 			"transformations": [
 				{
-					"name": "selectRequiredFields"
+					"name": "SelectRequiredFields"
+				},
+				{
+					"name": "CountryLookup"
+				},
+				{
+					"name": "SelectRequiredFieldsFromPreviousStep"
 				}
 			],
 			"scriptLines": [
@@ -31,6 +44,16 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> HospitalAdmissions",
+				"source(output(",
+				"          country as string,",
+				"          country_code_2_digit as string,",
+				"          country_code_3_digit as string,",
+				"          continent as string,",
+				"          population as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> CountrySource",
 				"HospitalAdmissions select(mapColumn(",
 				"          country,",
 				"          indicator,",
@@ -40,7 +63,25 @@
 				"          source",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> selectRequiredFields"
+				"     skipDuplicateMapOutputs: true) ~> SelectRequiredFields",
+				"SelectRequiredFields, CountrySource lookup(SelectRequiredFields@country == CountrySource@country,",
+				"     multiple: false,",
+				"     pickup: 'any',",
+				"     broadcast: 'auto')~> CountryLookup",
+				"CountryLookup select(mapColumn(",
+				"          country = SelectRequiredFields@country,",
+				"          indicator,",
+				"          reported_date,",
+				"          reported_year_week,",
+				"          value,",
+				"          source,",
+				"          country = CountrySource@country,",
+				"          country_code_2_digit,",
+				"          country_code_3_digit,",
+				"          population",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectRequiredFieldsFromPreviousStep"
 			]
 		}
 	}

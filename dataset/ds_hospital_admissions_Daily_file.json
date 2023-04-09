@@ -1,5 +1,5 @@
 {
-	"name": "ds_hospital_admissions_weekly_file",
+	"name": "ds_hospital_admissions_Daily_file",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_adls_agcoviddl",
@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"folderPath": "ecdc/hospital_admissions/Weekly Load",
+				"folderPath": "ecdc/hospital_admissions/Daily Load",
 				"fileSystem": "processed"
 			},
 			"columnDelimiter": ",",
